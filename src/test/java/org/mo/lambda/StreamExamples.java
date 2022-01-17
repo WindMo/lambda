@@ -110,6 +110,16 @@ class StreamExamples {
         printCollection(nameList);
     }
 
+    // 窥探
+    @Test
+    void peekExample() {
+
+        List<Person> results = people.stream()
+                .peek(person -> person.setCity("北京"))
+                .collect(Collectors.toList());
+        printCollection(results);
+    }
+
     // 匹配
     @Test
     void matchExample() {
@@ -228,7 +238,7 @@ class StreamExamples {
     }
 
 
-    // 平均值
+    // 均值
     @Test
     void averageExample() {
 
@@ -270,7 +280,7 @@ class StreamExamples {
 
     //----------------------------------
     // 中间操作篇，每次中间操作都会产生新的流
-    // 终端操作 - 收集器
+    // 终端操作，关闭流 - 收集器
     //----------------------------------
 
     // 收集 - 总数
@@ -361,6 +371,42 @@ class StreamExamples {
                 .stream()
                 .collect(Collectors.groupingBy(Person::getGender,Collectors.counting()));
         printMap(result4);
+    }
+
+    // 并行模式
+    @Test
+    void parallelExample() {
+
+        /*
+            并行:多个任务在同一时间点发生，由多个线程执行，底层使用 JDK fork/join framework
+            效率：
+                    简单类型    Steam并行迭代 > 外部迭代  >  Steam串行迭代
+                    复杂类型    Steam并行迭代 > Steam串行迭代  > 外部迭代
+         */
+
+        // 随机返回一个
+        for (int i = 0; i < 100; i++) {
+
+            Optional<Person> randomOneInFor = people
+                    .stream()
+                    .parallel()
+                    .findAny();
+            randomOneInFor.ifPresent(person -> System.out.println("randomOneInFor: " + person));
+        }
+
+//        List<String> stringList = new ArrayList<>();
+//        for (int i = 0; i < 1000; i++) {
+//
+//            stringList.add("string-" + i);
+//        }
+//        for (int i = 0; i < 100; i++) {
+//
+//            Optional<String> randomStringInFor = stringList
+//                    .stream()
+//                    .parallel()
+//                    .findAny();
+//            randomStringInFor.ifPresent(str -> System.out.println("randomOneInFor: " + str));
+//        }
     }
 
     //---------print methods----------
