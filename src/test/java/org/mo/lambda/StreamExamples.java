@@ -1,19 +1,22 @@
 package org.mo.lambda;
 
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mo.lambda.pojo.Gender;
 import org.mo.lambda.pojo.Person;
 import org.mo.lambda.pojo.PersonView;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Slf4j
+/**
+ * 流式操作
+ * @author WindShadow
+ * @version 2022-01-18.
+ */
+
 class StreamExamples {
 
     private final List<Person> people = new ArrayList<>();
@@ -373,41 +376,6 @@ class StreamExamples {
         printMap(result4);
     }
 
-    // 并行模式
-    @Test
-    void parallelExample() {
-
-        /*
-            并行:多个任务在同一时间点发生，由多个线程执行，底层使用 JDK fork/join framework
-            效率：
-                    简单类型    Steam并行迭代 > 外部迭代  >  Steam串行迭代
-                    复杂类型    Steam并行迭代 > Steam串行迭代  > 外部迭代
-         */
-
-        // 随机返回一个
-        for (int i = 0; i < 100; i++) {
-
-            Optional<Person> randomOneInFor = people
-                    .stream()
-                    .parallel()
-                    .findAny();
-            randomOneInFor.ifPresent(person -> System.out.println("randomOneInFor: " + person));
-        }
-
-//        List<String> stringList = new ArrayList<>();
-//        for (int i = 0; i < 1000; i++) {
-//
-//            stringList.add("string-" + i);
-//        }
-//        for (int i = 0; i < 100; i++) {
-//
-//            Optional<String> randomStringInFor = stringList
-//                    .stream()
-//                    .parallel()
-//                    .findAny();
-//            randomStringInFor.ifPresent(str -> System.out.println("randomOneInFor: " + str));
-//        }
-    }
 
     //---------print methods----------
 
